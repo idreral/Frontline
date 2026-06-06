@@ -33,7 +33,7 @@ void DrawArrow(Vector2 from, Vector2 to,
     if (Vec2Distance(from, to) < 5.0f) return;
 
     // Основная линия
-    DrawLineEx(from, to, lineThickness, BLACK);
+    DrawLineEx(from, to, lineThickness, WHITE);
 
     // Направление стрелки (от from к to)
     Vector2 dir = Vec2Normalize(Vec2Sub(to, from));
@@ -44,7 +44,7 @@ void DrawArrow(Vector2 from, Vector2 to,
     Vector2 base = Vec2Sub(tip, Vec2Scale(dir, arrowLen));
     Vector2 left  = Vec2Add(base, Vec2Scale(perp, arrowLen * 0.4f));
     Vector2 right = Vec2Sub(base, Vec2Scale(perp, arrowLen * 0.4f));
-    DrawTriangle(tip, left, right, BLACK);
+    DrawTriangle(tip, left, right, WHITE);
 
     // 2. Перья на середине — наклонены назад (к началу стрелки)
     Vector2 mid = Vec2Scale(Vec2Add(from, to), 0.5f); // средняя точка
@@ -59,14 +59,14 @@ void DrawArrow(Vector2 from, Vector2 to,
     Vector2 leftFeatherEnd  = Vec2Add(mid, Vec2Scale(leftFeatherDir, featherLen));
     Vector2 rightFeatherEnd = Vec2Add(mid, Vec2Scale(rightFeatherDir, featherLen));
 
-    DrawLineEx(mid, leftFeatherEnd, lineThickness, BLACK);
-    DrawLineEx(mid, rightFeatherEnd, lineThickness, BLACK);
+    DrawLineEx(mid, leftFeatherEnd, lineThickness, WHITE);
+    DrawLineEx(mid, rightFeatherEnd, lineThickness, WHITE);
 }
 
 int main() {
     const int screenWidth = 800;
     const int screenHeight = 600;
-    InitWindow(screenWidth, screenHeight, "Arrow with angled mid feathers (raylib)");
+    InitWindow(screenWidth, screenHeight, "Frontline");
     SetTargetFPS(60);
 
     Vector2 start = { 0, 0 };
@@ -92,7 +92,7 @@ int main() {
         }
 
         BeginDrawing();
-        ClearBackground(RAYWHITE);
+        ClearBackground(DARKGRAY);
 
         if (hasStart) DrawCircleV(start, 7, RED);
         if (hasEnd)   DrawCircleV(end,   7, BLUE);
