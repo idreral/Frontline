@@ -40,22 +40,6 @@ class SoldierFactory : public Building{};
 
 //class RocketLauncherFactory : public Building();
 
+//class RocketSilo : public Building();
+
 class BuildingsManager {};
-
-enum GameState{
-  WAITING_FOR_PLAYERS,
-  COUNTDOWN,
-  PLAYING_HOST,
-  PLAYING_CLIENT,
-  PAUSED,
-  DISCONNECTED
-};
-
-class GameManager {
-public:
-  GameManager()
-  void Update(float dT){};
-private:
-  std::string playerName;
-  GameState gameState;
-};
