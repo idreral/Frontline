@@ -165,28 +165,27 @@ void DrawTestPalletPart(Vector2 pos, float size, float padding, Color color){
 
 void DrawTestPallet(Vector2 pos){
   float size = 20.0f;
-  float usize = size;
   float padding = 10.0f;
 
   DrawTestPalletPart(pos, size, padding, WHITE);
   
-  pos.y += usize+padding;
+  pos.y += size+padding;
   DrawTestPalletPart(pos, size, padding, BLUE);
   
-  pos.y += usize+padding;
+  pos.y += size+padding;
   DrawTestPalletPart(pos, size, padding, RED);
 
-  pos.y += usize+padding;
+  pos.y += size+padding;
   DrawTestPalletPart(pos, size, padding, GREEN);
 
-  pos.y += usize+padding;
+  pos.y += size+padding;
   DrawTestPalletPart(pos, size, padding, YELLOW);
 
-  pos.y += usize+padding;
+  pos.y += size+padding;
   DrawCursor(pos, 12.0f, WHITE);
   DrawCircleV(pos, 2, RED);
 
-  pos.y += usize+padding;
+  pos.y += size+padding;
   DrawArrow(pos, { pos.x+200, pos.y });
   DrawArrow({ pos.x+200, pos.y }, pos);
 }
