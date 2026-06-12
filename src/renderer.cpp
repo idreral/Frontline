@@ -28,7 +28,7 @@ inline Vector2 Vec2Scale(Vector2 v, float s) {
 inline Vector2 Vec2Rotate(Vector2 v, float angleRad) {
   float c = cosf(angleRad), s = sinf(angleRad);
   return {v.x * c - v.y * s, v.x * s + v.y * c};
-}
+}    
 
 void DrawArrow(Vector2 from, Vector2 to, float lineThickness, float arrowLen, float featherLen, float featherAngleDeg, Color color) {
   if (Vec2Distance(from, to) < 5.0f) return;
@@ -51,12 +51,130 @@ void DrawArrow(Vector2 from, Vector2 to, float lineThickness, float arrowLen, fl
   DrawLineEx(mid, rightFeatherEnd, lineThickness, color);
 }
 
-void DrawCursor(Vector2 pos, float size, Color color) {
-    Vector2 local[3] = {
-        { 0, -size },
-        { -size * 0.6f, size * 0.4f },
-        { size * 0.6f, size * 0.4f }
-    };
-    DrawTriangle(Vec2Add(pos, local[0]), Vec2Add(pos, local[1]), Vec2Add(pos, local[2]), color);
+void DrawCursor(Vector2 pos, float size, Color color, float thickness) {
+  Vector2 leftLeg = { pos.x, pos.y+size};
+  Vector2 rightLeg = { pos.x+size/2, pos.y+size};
+  DrawLineEx(pos, leftLeg, thickness, color);
+  DrawLineEx(pos, rightLeg, thickness, color);
+  //DrawCircleV(pos, 3, RED);
 }
 
+void DrawSquare(Vector2 pos, float radius, Color color, float thickness) {
+  float left   = pos.x - radius/2;
+  float right  = pos.x + radius/2;
+  float top    = pos.y - radius/2;
+  float bottom = pos.y + radius/2;
+
+  DrawLineEx({ left,  top   }, { right, top   }, thickness, color);
+  DrawLineEx({ right, top   }, { right, bottom}, thickness, color);
+  DrawLineEx({ right, bottom}, { left,  bottom}, thickness, color);
+  DrawLineEx({ left,  bottom}, { left,  top   }, thickness, color);
+}
+
+void DrawDiamond(Vector2 pos, float radius, Color color, float thickness) {
+  Vector2 top    = { pos.x, pos.y - radius/2 };
+  Vector2 right  = { pos.x + radius/2, pos.y };
+  Vector2 bottom = { pos.x, pos.y + radius/2 };
+  Vector2 left   = { pos.x - radius/2, pos.y };
+
+  DrawLineEx(top, right, thickness, color);
+  DrawLineEx(right, bottom, thickness, color);
+  DrawLineEx(bottom, left, thickness, color);
+  DrawLineEx(left, top, thickness, color);
+}
+void DrawSoldier(Vector2 pos, float size, Color color, float thickness){
+  DrawLineEx({ pos.x-size/2, pos.y+size/2 }, { pos.x+size/2, pos.y-size/2 }, thickness, color);
+  DrawLineEx({ pos.x+size/2, pos.y+size/2 }, { pos.x-size/2, pos.y-size/2 }, thickness, color);
+}
+
+void DrawTank(Vector2 pos, float size, Color color, float thickness){
+  DrawDiamond(pos, size, color, thickness);
+}
+
+void DrawRocketLauncher(Vector2 pos, float size, Color color, float thickness){
+  DrawLineEx({ pos.x, pos.y-size/2 }, { pos.x, pos.y+size/2 }, thickness, color);
+  DrawLineEx({ pos.x-size/2, pos.y },{ pos.x+size/2, pos.y}, thickness, color);
+}
+
+void DrawTower(Vector2 pos, float size, Color color, float thickness){
+  DrawLineEx({ pos.x, pos.y-size/2 }, { pos.x, pos.y+size/2 }, thickness, color);
+  DrawLineEx({ pos.x-size/4, pos.y }, { pos.x+size/4, pos.y }, thickness, color);
+  DrawLineEx({ pos.x-size/4, pos.y+size/2 }, { pos.x+size/4, pos.y+size/2 }, thickness, color);
+  DrawLineEx({ pos.x, pos.y-size/2 }, { pos.x-size/4, pos.y-size/4 }, thickness, color);
+  DrawLineEx({ pos.x, pos.y-size/2 }, { pos.x+size/4, pos.y-size/4 }, thickness, color);
+}
+
+void DrawRocketSilo(Vector2 pos, float size, Color color, float thickness){
+  float radius = size/4;
+  DrawRing({ pos.x, pos.y-size/4}, radius-thickness, radius, -180, 0, 0, color);
+  DrawLineEx({ pos.x, pos.y-size/2 }, { pos.x, pos.y+size/2}, thickness, color);
+  DrawLineEx({ pos.x-size/4, pos.y-size/4 }, { pos.x-size/4, pos.y+size/2}, thickness, color);
+  DrawLineEx({ pos.x+size/4, pos.y-size/4 }, { pos.x+size/4, pos.y+size/2}, thickness, color);
+}
+
+void DrawBarracks(Vector2 pos, float size, Color color, float thickness){
+  DrawSquare(pos, size, color, thickness);
+  DrawSoldier(pos, size, color, thickness);
+}
+
+void DrawTankFactory(Vector2 pos, float size, Color color, float thickness){
+  DrawSquare(pos, size, color, thickness);
+  DrawTank(pos, size, color, thickness);
+}
+
+void DrawRocketLauncherFactory(Vector2 pos, float size, Color color, float thickness){
+  DrawSquare(pos, size, color, thickness);
+  DrawRocketLauncher(pos, size, color, thickness);
+}
+
+void DrawTestPalletPart(Vector2 pos, float size, float padding, Color color){
+  float oldX = pos.x;
+  float s = size;
+  float p = padding;
+
+  DrawCircleV(pos, 2, RED);
+  DrawBarracks(pos, s, color, 2);
+
+  pos.x += s+p;
+  DrawSoldier(pos, s/2, color, 2);
+  DrawCircleV(pos, 2, RED);
+
+  pos.x += s+p;
+  DrawTankFactory(pos, s, color, 2);
+  DrawCircleV(pos, 2, RED);
+
+  pos.x += s+p;
+  DrawTank(pos, s/2, color, 2);
+  DrawCircleV(pos, 2, RED);
+
+  pos.x += s+p;
+  DrawRocketLauncherFactory(pos, s, color, 2);
+  DrawCircleV(pos, 2, RED);
+
+  pos.x += s+p;
+  DrawRocketLauncher(pos, s/2, color, 2);
+  DrawCircleV(pos, 2, RED);
+
+  pos.x += s+p;
+  DrawTower(pos, s, color, 2);
+  DrawCircleV(pos, 2, RED);
+
+  pos.x += s+p;
+  DrawRocketSilo(pos, s, color, 2);
+  DrawCircleV(pos, 2, RED);
+}
+
+void DrawTestPallet(Vector2 pos){
+  float size = 20.0f;
+  float usize = size;
+  float padding = 10.0f;
+  DrawTestPalletPart(pos, size, padding, WHITE);
+  pos.y += usize+padding;
+  DrawTestPalletPart(pos, size, padding, BLUE);
+  pos.y += usize+padding;
+  DrawTestPalletPart(pos, size, padding, RED);
+  pos.y += usize+padding;
+  DrawTestPalletPart(pos, size, padding, GREEN);
+  pos.y += usize+padding;
+  DrawTestPalletPart(pos, size, padding, YELLOW);
+}

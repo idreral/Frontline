@@ -19,4 +19,11 @@ void DrawArrow(Vector2 from, Vector2 to,
                float featherLen = 15.0f,
                float featherAngleDeg = 45.0f,
                Color color = WHITE);
-void DrawCursor(Vector2 pos, float size, Color color);
+
+void DrawCursor(Vector2 pos, float size, Color color, float thickness = 2);
+
+void DrawSquare(Vector2 pos, float radius, Color color, float thickness);
+
+void DrawDiamond(Vector2 pos, float radius, Color color, float thickness);
+
+void DrawTestPallet(Vector2 pos = { 0, 0 });

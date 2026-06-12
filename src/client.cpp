@@ -38,6 +38,7 @@ bool Client::Start(){
 }
 
 void Client::Run(){
+  bool shaderEnabled = 1;
   Vector2 start = { 0, 0 };
   Vector2 end = { 0, 0 };
   bool hasStart = 0;
@@ -47,6 +48,7 @@ void Client::Run(){
 
   while (!WindowShouldClose()) {
     if (IsKeyPressed(KEY_F11)) ToggleFullscreen();
+    if (IsKeyPressed(KEY_F2)) shaderEnabled = !shaderEnabled; 
 
     float scale = fminf((float)GetScreenWidth() / gameWidth, (float)GetScreenHeight() / gameHeight);
     float dstX = (GetScreenWidth() - gameWidth * scale) * 0.5f;
@@ -77,25 +79,31 @@ void Client::Run(){
     }
 
     BeginTextureMode(target);
-  
+      ClearBackground(BLACK);
       Vector2 currentGameMouse = GetGameMousePos();
       if (hasStart && !hasEnd) DrawArrow(start, currentGameMouse);
       else if (hasStart && hasEnd) DrawArrow(start, end); 
       
-      ClearBackground(BLACK);
       if (hasStart) DrawCircleV(start, 7, RED);
       if (hasEnd) DrawCircleV(end, 7, BLUE);
 
       DrawText("Left click: set points", 10, 10, 20, WHITE);
+      DrawText(TextFormat("Shader: %s", shaderEnabled ? "ON" : "OFF"), 10, 40, 20, YELLOW);
+
+      DrawTestPallet({ 20, 100 });
 
       DrawCursor(currentGameMouse, 12.0f, WHITE);
     EndTextureMode();
 
     BeginDrawing();
       ClearBackground(BLACK);
-      BeginShaderMode(crtShader);
-        DrawTexturePro(target.texture, (Rectangle){ 0, 0, (float)target.texture.width, (float)-target.texture.height }, (Rectangle){ dstX, dstY, gameWidth * scale, gameHeight * scale }, (Vector2){ 0, 0 }, 0.0f, WHITE);
-      EndShaderMode();
+      if(shaderEnabled){
+        BeginShaderMode(crtShader);
+          DrawTexturePro(target.texture, (Rectangle){ 0, 0, (float)target.texture.width, (float)-target.texture.height }, (Rectangle){ dstX, dstY, gameWidth * scale, gameHeight * scale }, (Vector2){ 0, 0 }, 0.0f, WHITE);
+        EndShaderMode();
+      } else {
+        DrawTexturePro(target.texture, (Rectangle){ 0, 0, (float)target.texture.width, (float)-target.texture.height }, (Rectangle){ dstX, dstY, gameWidth * scale, gameHeight * scale }, (Vector2){ 0, 0 }, 0.0f, WHITE); 
+      }
     EndDrawing();
   }
 }
