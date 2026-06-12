@@ -26,4 +26,20 @@ void DrawSquare(Vector2 pos, float radius, Color color, float thickness);
 
 void DrawDiamond(Vector2 pos, float radius, Color color, float thickness);
 
+void DrawTank(Vector2 pos, float size, Color color, float thickness);
+
+void DrawRocketLauncher(Vector2 pos, float size, Color color, float thickness);
+
+void DrawTower(Vector2 pos, float size, Color color, float thickness);
+
+void DrawRocketSilo(Vector2 pos, float size, Color color, float thickness);
+
+void DrawBarracks(Vector2 pos, float size, Color color, float thickness);
+
+void DrawTankFactory(Vector2 pos, float size, Color color, float thickness);
+
+void DrawRocketLauncherFactory(Vector2 pos, float size, Color color, float thickness);
+
+
+
 void DrawTestPallet(Vector2 pos = { 0, 0 });
