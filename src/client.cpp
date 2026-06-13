@@ -1,11 +1,9 @@
 #include "client.h"
 #include "renderer.h"
+#include "gameStates.h"
 #include <cmath>
 #include <raylib.h>
-
-
-void Client::Update(float dT){
-}
+#include <memory>
 
 Client::Client(){
   gameWidth = 1280;
@@ -38,11 +36,8 @@ bool Client::Start(){
 }
 
 void Client::Run(){
+  ChangeState(std::make_unique<MainMenuState>());
   bool shaderEnabled = 1;
-  Vector2 start = { 0, 0 };
-  Vector2 end = { 0, 0 };
-  bool hasStart = 0;
-  bool hasEnd = 0;
 
   int lastWinW = gameWidth, lastWinH = gameHeight;
 
@@ -63,34 +58,12 @@ void Client::Run(){
       return{ gx, gy };
     };
 
-    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-      Vector2 gameMouse = GetGameMousePos();
-      if (hasStart && hasEnd) {
-        start = gameMouse;
-        hasStart = 1;
-        hasEnd = 0;
-      } else if (hasStart && !hasEnd) {
-        end = gameMouse;
-        hasEnd = 1;
-      } else {
-        start = gameMouse;
-        hasStart = true;
-      }
-    }
-
     BeginTextureMode(target);
       ClearBackground(BLACK);
-      Vector2 currentGameMouse = GetGameMousePos();
-      if (hasStart && !hasEnd) DrawArrow(start, currentGameMouse);
-      else if (hasStart && hasEnd) DrawArrow(start, end); 
       
-      if (hasStart) DrawCircleV(start, 7, RED);
-      if (hasEnd) DrawCircleV(end, 7, BLUE);
+      Vector2 currentGameMouse = GetGameMousePos();
 
-      DrawText("Left click: set points", 10, 10, 20, WHITE);
-      DrawText(TextFormat("Shader: %s", shaderEnabled ? "ON" : "OFF"), 10, 40, 20, YELLOW);
-
-      DrawTestPallet({ 20, 100 });
+      currentState->Update(*this, GetFrameTime(), currentGameMouse);
 
       DrawCursor(currentGameMouse, 12.0f, WHITE);
     EndTextureMode();
@@ -114,4 +87,8 @@ void Client::Stop(){
   UnloadShader(crtShader);
   UnloadRenderTexture(target);
   CloseWindow();
+}
+
+void Client::ChangeState(std::unique_ptr<GameState> newState){
+  currentState = std::move(newState);
 }
