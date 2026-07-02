@@ -12,10 +12,16 @@ class GameState {
 
 class MainMenuState : public GameState {
   public:
+    ~MainMenuState() override = default;
     void Update(Client& client, float dT, Vector2 mousePos);
+  private:
+    UIManager ui;
 };
 
 class TestState : public GameState {
   public:
+    TestState();
+    ~TestState() override = default;
     void Update(Client& client, float dT, Vector2 mousePos);
+  private:
 };

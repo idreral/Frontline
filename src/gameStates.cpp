@@ -3,6 +3,11 @@
 #include "client.h"
 #include <raylib.h>
 #include "renderer.h"
+#include "UIManager.h"
+
+TestState::TestState(){
+  UIManager ui;
+}
 
 void TestState::Update(Client& client, float dT, Vector2 mousePos){
   Vector2 start = { 0, 0 };
@@ -30,6 +35,7 @@ void TestState::Update(Client& client, float dT, Vector2 mousePos){
   DrawText("Left click: set points", 10, 10, 20, WHITE);
 
   DrawTestPallet({ 20, 100 });
+  DrawCursor(mousePos, 15, WHITE);
 }
 
 void MainMenuState::Update(Client& client,float dT, Vector2 mousePos){

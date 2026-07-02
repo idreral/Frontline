@@ -31,12 +31,14 @@ bool Client::Start(){
     SetShaderValue(crtShader, GetShaderLocation(crtShader, "chromaStrength"), &chromaStrength, SHADER_UNIFORM_FLOAT);
   }
 
-  target = LoadRenderTexture(gameWidth, gameHeight);
+  target = LoadRenderTexture(gameWidth, gameHeight); 
+
   return 1;
 }
 
 void Client::Run(){
-  ChangeState(std::make_unique<MainMenuState>());
+  ChangeState(std::make_unique<TestState>());
+
   bool shaderEnabled = 1;
 
   int lastWinW = gameWidth, lastWinH = gameHeight;
@@ -65,7 +67,6 @@ void Client::Run(){
 
       currentState->Update(*this, GetFrameTime(), currentGameMouse);
 
-      DrawCursor(currentGameMouse, 12.0f, WHITE);
     EndTextureMode();
 
     BeginDrawing();
@@ -83,7 +84,6 @@ void Client::Run(){
 
 void Client::Stop(){
   ShowCursor();
-
   UnloadShader(crtShader);
   UnloadRenderTexture(target);
   CloseWindow();
